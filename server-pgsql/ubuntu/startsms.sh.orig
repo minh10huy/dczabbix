@@ -1,0 +1,27 @@
+#!/bin/bash
+# gammu
+#RUN apt-get -y install wvdial usb-modeswitch
+### wvdialconf
+#RUN apt-get install -y gammu gammu-smsd
+#RUN mkdir -p /var/log/gammu /var/spool/gammu/{inbox,outbox,sent,error}
+#RUN chown www-data:www-data -R /var/spool/gammu/
+#RUN apt-get install -y acl
+#RUN setfacl -Rm g:gammu:rwx /var/spool/gammu/
+#RUN wget -q https://raw.githubusercontent.com/minh10huy/gammu-smsdrc/master/gammu-smsdrc -O /etc/gammu-smsdrc
+#RUN ln -s /etc/gammu-smsdrc /etc/gammurc
+### gammu -f /var/log/gammulog identify
+#RUN sed -i 's/USER\=root2/USER\=gammu/g' /etc/init.d/gammu-smsd
+datetime=$(date +"%d-%m-%Y %H:%M:%S")
+### touch /var/log/check_gammu.log
+### UP=$(pgrep gammu-smsd | wc -l)
+UP=$(pgrep x11vnc | wc -l)
+if [ "$UP" -ne 1 ]
+then
+	echo "$datetime - gammu-smsd is down." >> /var/log/check_gammu.log
+	#/etc/init.d/gammu-smsd start
+	sudo systemctl start x11vnc
+else
+        echo "$datetime - gammu-smsd is well." >> /var/log/check_gammu.log
+fi
+#/etc/init.d/gammu-smsd start
+### echo "Hi, my name is BosSMS on $datetime" | gammu sendsms TEXT 0903789334

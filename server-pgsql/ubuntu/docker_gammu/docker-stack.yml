@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  playsms:
+    image: playsms_gammu:1.4.2
+    ports:
+      - "22222:22"
+      - "8181:80"
+    privileged: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB1"
+    volumes:
+      - /home/pi/config/docker-compose/sys_playsms/docker_gammu/script:/mnt
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+      placement:
+        constraints: [node.role == manager]

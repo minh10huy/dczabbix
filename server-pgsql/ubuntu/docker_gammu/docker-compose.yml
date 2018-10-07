@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  playsms:
+    #build:
+    #  context: .
+    image: playsms_gammu:1.4.2
+    ports:
+      - "22222:22"
+      - "8181:80"
+      - "3306:3306"
+    privileged: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB1"
+    volumes:
+      - /home/pi/config/docker-compose/sys_playsms/docker_gammu/script:/mnt
+      - ./mysql/:/var/lib/mysql
+    #command: chmod +x /mnt/start.sh
+    #command: /mnt/start.sh
+  phpmyadmin:
+     image: sk278/phpmyadmin-armhf
+     #environment:
+     #  - PMA_ARBITRARY=1
+     #  - MYSQL_USER=${MYSQL_USER}
+     #  - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+     #  - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+     volumes:
+       - ./mysql:/etc/mysql
+       - ./mysql:/var/lib/mysql
+     ports:
+       - "58080:80"
